@@ -22,3 +22,9 @@ Route::get('/about', function () {
 Route::get('/add', function () {
     return view('add');
 });
+
+//post
+Route::post('/store', function(\Illuminate\Http\Request $request){
+   $images = $request->file('img');
+   $images->store("uploads");
+});

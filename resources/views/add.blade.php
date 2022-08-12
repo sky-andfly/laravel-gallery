@@ -3,12 +3,13 @@
 @section('content')
     <div class="container">
         <h2>Добавь изображение</h2>
-        <form action="" enctype="multipart/form-data" method="post">
+        <form action="/store" enctype="multipart/form-data" method="post">
+            {{csrf_field()}}
             <div class="form-group">
                 <label for="">Изображение: </label>
             </div>
             <div class="form-group">
-                <input type="file" name="" id="">
+                <input type="file" name="img" id="">
             </div>
             <button type="submit" class="btn btn-primary mb-2">Загрузить</button>
         </form>
