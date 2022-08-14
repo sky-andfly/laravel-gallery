@@ -14,7 +14,7 @@
                     <div class="btn-group " role="group" aria-label="Basic mixed styles example">
                         <a href="show/{{$img->id}}" class="btn btn-info">Просмотреть</a>
                         <a href="edit/{{$img->id}}" class="btn btn-warning">Изменить</a>
-                        <a href="" class="btn btn-danger">Удалить</a>
+                        <a href="delete/{{$img->id}}" class="btn btn-danger">Удалить</a>
                     </div>
                 </div>
             @endforeach

@@ -2,6 +2,8 @@
 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ImagesController;
+use App\Http\Controllers\AboutController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,51 +16,14 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    $images = DB::table('images')
-        ->select('*')
-        ->get();
-
-    $data = [
-        'images' => $images->all(),
-    ];
-    return view('welcome', $data);
-});
-Route::get('/about', function () {
-    return view('about');
-});
-Route::get('/add', function () {
-    return view('add');
-});
-Route::get("/show/{id}", function($id){
-    $img = DB::table('images')->select('*')->where('id', $id)->first();
-    return view('show', ['img' => $img]);
-});
-Route::get("edit/{id}", function($id){
-    $img = DB::table('images')->select('*')->where('id', $id)->first();
-    return view('edit', ['img' => $img]);
-});
-
+Route::get('/', [ImagesController::class, 'index']);
+Route::get('/about', [AboutController::class, 'about']);
+Route::get('/add', [ImagesController::class, 'add']);
+Route::get("/show/{id}", [ImagesController::class, 'show']);
+Route::get("edit/{id}", [ImagesController::class, 'edit']);
+Route::get('delete/{id}', [ImagesController::class, 'delete']);
 
 //post
-Route::post("/update/{id}", function (\Illuminate\Http\Request $request, $id){
-    $delete_img = DB::table('images')->select('image')->where('id', $id)->first()->image;
+Route::post("/update/{id}",[ImagesController::class, 'update']);
 
-    \Illuminate\Support\Facades\Storage::delete($delete_img);
-    $images = $request->file('img')->store("uploads");
-    DB::table('images')
-        ->where('id', $id)
-        ->update(['image' => $images]);
-    return redirect("/show/{$id}");
-});
-
-Route::post('/store', function(\Illuminate\Http\Request $request){
-
-   $images = $request->file('img')->store("uploads");
-
-    DB::table('images')->insert([
-        'image' => $images,
-        'text' => $request->input('text')
-    ]);
-    return redirect("/");
-});
+Route::post('/store', [ImagesController::class, 'store']);
