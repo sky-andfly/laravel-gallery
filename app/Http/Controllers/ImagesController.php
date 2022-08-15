@@ -5,18 +5,18 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
-
+use App\Service\ImageService;
 class ImagesController extends Controller
 {
-    public function index() {
-    $images = DB::table('images')
-        ->select('*')
-        ->get();
+    private $imageService;
+    public function __construct(ImageService $imageService)
+    {
+        $this->imageService = $imageService;
+    }
 
-    $data = [
-        'images' => $images->all(),
-    ];
-    return view('welcome', $data);
+    public function index() {
+
+    return view('welcome', ['images' => $this->imageService->get_all_images()]);
 }
     public function add() {
         return view('add');
@@ -48,13 +48,8 @@ class ImagesController extends Controller
         return redirect("/show/{$id}");
     }
     public function store(Request $request){
+        $this->imageService->add($request->file('img'),  $request->input('text'));
 
-        $images = $request->file('img')->store("uploads");
-
-        DB::table('images')->insert([
-            'image' => $images,
-            'text' => $request->input('text')
-        ]);
         return redirect("/");
     }
 }
